@@ -12,7 +12,7 @@ namespace Resizer
         public string Name => "Resizer";
         public string Description => "Changes the size of building prefabs";
 
-        private bool _resized = false;
+        //private bool _resized = false;
 
         public void OnEnabled()
         {
@@ -34,16 +34,18 @@ namespace Resizer
         // called when level is loaded
         public void OnLevelLoaded(LoadMode mode)
         {
+            /*
             //Debug.Log("Resizer: OnLevelLoaded - called when level is loaded");
-             if (_resized)
-                Debug.Log("Resizer: building prefabs already reasized");
+            if (_resized)
+                Debug.Log("Resizer: building prefabs already resized");
             else
             {
                 Debug.Log("Resizer: resizing prefabs...");
-                Resizer.ResizeBuildingPrefabs();
+                //Resizer.ResizeBuildingPrefabs();
                 _resized = true;
                 Debug.Log("Resizer: resizing prefabs OK");
             }
+            */
        }
         
         // called when unloading begins
@@ -85,7 +87,6 @@ namespace Resizer
 
         public static void ResizeBuildingPrefabs()
         {
-            //Debug.Log("Resizer: OnLevelLoaded - called when level is loaded");
             // total number of loaded building assets
             int buildingPrefabCount = PrefabCollection<BuildingInfo>.LoadedCount();
             Debug.Log($"Resizer: number of loaded building prefabs is {buildingPrefabCount}");
@@ -164,20 +165,21 @@ namespace Resizer
             mesh.RecalculateTangents();
         }
 
+        public static void ProcessBuildingPrefab(this BuildingInfo prefab)
+        {
+            //Debug.Log($"Resizer: prefab {prefab.name}");
+            if (prefabsToResize.Contains(prefab.name))
+                prefab.ProcessBuildingPrefab(scaleValue);
+        }
+
         public static void ProcessBuildingPrefab(this BuildingInfo prefab, Vector3 scale)
         {
-#if DEBUG
             Debug.Log($"Resizer: ========== prefab {prefab.name} ==========");
-#endif
 
             // main mash and generated mesh only if not null
-#if DEBUG
-            prefab.m_mesh.DebugDump();
-#endif
+            //prefab.m_mesh.DebugDump();
             prefab.m_mesh.Resize(scale);
-#if DEBUG
-            prefab.m_mesh.DebugDump();
-#endif
+            //prefab.m_mesh.DebugDump();
             prefab.m_generatedMesh?.Resize(scale);
 
             // shift props
@@ -194,50 +196,45 @@ namespace Resizer
             foreach (BuildingInfo.Prop prop in prefab.m_props)
                 if (  (prop.m_finalProp != null && CheckPropName(prop.m_finalProp.name.ToLower()) ) || (prop.m_prop != null &&  CheckPropName(prop.m_prop.name.ToLower()) ) )
                 {
-#if DEBUG
-                    Debug.Log($"Resizer: shifting prop {prop.m_finalProp.name}");
-#endif
+                    //Debug.Log($"Resizer: shifting prop {prop.m_prop?.name}");
                     prop.m_position = Vector3.Scale(prop.m_position, scale);
                 }
 
             // shift doors
             //prefab.m_enterDoors[0].m_position
             //prefab.m_exitDoors[0].m_position
-            foreach (BuildingInfo.Prop prop in prefab.m_enterDoors)
-            {
-#if DEBUG
-                Debug.Log($"Resizer: shifting entry door {prop.m_finalProp.name}");
-#endif
-                prop.m_position = Vector3.Scale(prop.m_position, scale);
-            }
-            foreach (BuildingInfo.Prop prop in prefab.m_exitDoors)
-            {
-#if DEBUG
-                Debug.Log($"Resizer: shifting exit doors {prop.m_finalProp.name}");
-#endif
-                prop.m_position = Vector3.Scale(prop.m_position, scale);
-            }
-
+            /*
+            if (prefab.m_enterDoors != null)
+                foreach (BuildingInfo.Prop prop in prefab.m_enterDoors)
+                {
+                    //Debug.Log($"Resizer: shifting entry door {prop.m_prop?.name}");
+                    prop.m_position = Vector3.Scale(prop.m_position, scale);
+                }
+            if (prefab.m_exitDoors != null)
+                foreach (BuildingInfo.Prop prop in prefab.m_exitDoors)
+                {
+                    //Debug.Log($"Resizer: shifting exit doors {prop.m_prop?.name}");
+                    prop.m_position = Vector3.Scale(prop.m_position, scale);
+                }
+            */
 
             // update lod meshes
             // LOD mesh
-#if DEBUG
-            Debug.Log($"Resizer: resizing lod meshes");
-#endif
+            //Debug.Log($"Resizer: resizing lod meshes");
             //prefab.m_lodMesh.DebugDump();
             prefab.m_lodMesh.Resize(scale);
             //prefab.m_lodMesh.DebugDump();
             // LOD mesh 1
             //prefab.m_lodMeshCombined1.DebugDump();
-            prefab.m_lodMeshCombined1.Resize(scale);
+            prefab.m_lodMeshCombined1?.Resize(scale);
             //prefab.m_lodMeshCombined1.DebugDump();
             // LOD mesh 4
             //prefab.m_lodMeshCombined4.DebugDump();
-            prefab.m_lodMeshCombined4.Resize(scale);
+            prefab.m_lodMeshCombined4?.Resize(scale);
             //prefab.m_lodMeshCombined4.DebugDump();
             // LOD mesh 8
             //prefab.m_lodMeshCombined8.DebugDump();
-            prefab.m_lodMeshCombined8.Resize(scale);
+            prefab.m_lodMeshCombined8?.Resize(scale);
             //prefab.m_lodMeshCombined8.DebugDump();
 
 
