@@ -18,6 +18,7 @@ namespace Resizer
         {
             HarmonyHelper.DoOnHarmonyReady(() => ResizerPatcher.PatchAll());
             //Debug.Log("Infixo is asking where this message appears");
+            ResizerXml.LoadSettings();
         }
 
         public void OnDisabled()
@@ -64,6 +65,8 @@ namespace Resizer
 
     public static class Resizer
     {
+        private static readonly List<BuildingInfo> _resized = new List<BuildingInfo>();
+        /*
         public static string[] prefabsToResize = new string[] { "University", "Police Headquarters", "Fire Station" };
         public static Vector3 scaleValue = new Vector3(0.5f, 0.5f, 0.5f);
         public static string[] propsToShift = new string[] {
@@ -84,7 +87,8 @@ namespace Resizer
             "invisible helipad marker", // not sure?
             "radio mast"
         };
-
+        */
+        /*
         public static void ResizeBuildingPrefabs()
         {
             // total number of loaded building assets
@@ -100,7 +104,7 @@ namespace Resizer
                     prefab.ProcessBuildingPrefab(scaleValue);
             }
         }
-
+        */
         public static void DebugDump(this Mesh mesh)
         {
             if (mesh == null)
@@ -148,7 +152,7 @@ namespace Resizer
 
         public static void Resize(this Mesh mesh, Vector3 scale)
         {
-            Debug.Log($"Resizer: resizing mesh {mesh.name} by {scale}");
+            //Debug.Log($"Resizer: resizing mesh {mesh.name} by {scale}");
             //1.Calculate new positions or vertices.
             List<Vector3> oldVertices = new List<Vector3>();
             List<Vector3> newVertices = new List<Vector3>();
@@ -168,17 +172,20 @@ namespace Resizer
         public static void ProcessBuildingPrefab(this BuildingInfo prefab)
         {
             //Debug.Log($"Resizer: prefab {prefab.name}");
-            if (prefabsToResize.Contains(prefab.name))
-                prefab.ProcessBuildingPrefab(scaleValue);
+            if (ResizerXml.Settings != null && ResizerXml.Settings.CheckPrefabName(prefab.name) && !_resized.Contains(prefab))
+            {
+                prefab.ProcessBuildingPrefab(ResizerXml.Settings.GetScale(prefab.name));
+                _resized.Add(prefab);
+            }
         }
 
         public static void ProcessBuildingPrefab(this BuildingInfo prefab, Vector3 scale)
         {
-            Debug.Log($"Resizer: ========== prefab {prefab.name} ==========");
+            Debug.Log($"Resizer: resizing prefab {prefab.name} by {scale}");
 
             // main mash and generated mesh only if not null
             //prefab.m_mesh.DebugDump();
-            prefab.m_mesh.Resize(scale);
+            prefab.m_mesh?.Resize(scale);
             //prefab.m_mesh.DebugDump();
             prefab.m_generatedMesh?.Resize(scale);
 
@@ -187,14 +194,15 @@ namespace Resizer
 
             bool CheckPropName(string propName)
             {
-                foreach (string propPart in propsToShift)
-                    if (propName.Contains(propPart))
-                        return true;
-                return false;
+                //foreach (string propPart in propsToShift)
+                //if (propName.Contains(propPart))
+                //return true;
+                //return false;
+                return ResizerXml.Settings != null && ResizerXml.Settings.CheckPropName(propName);
             }
 
             foreach (BuildingInfo.Prop prop in prefab.m_props)
-                if (  (prop.m_finalProp != null && CheckPropName(prop.m_finalProp.name.ToLower()) ) || (prop.m_prop != null &&  CheckPropName(prop.m_prop.name.ToLower()) ) )
+                if ( (prop.m_prop != null && CheckPropName(prop.m_prop.name)) || (prop.m_finalProp != null && CheckPropName(prop.m_finalProp.name)) )
                 {
                     //Debug.Log($"Resizer: shifting prop {prop.m_prop?.name}");
                     prop.m_position = Vector3.Scale(prop.m_position, scale);
@@ -222,7 +230,7 @@ namespace Resizer
             // LOD mesh
             //Debug.Log($"Resizer: resizing lod meshes");
             //prefab.m_lodMesh.DebugDump();
-            prefab.m_lodMesh.Resize(scale);
+            prefab.m_lodMesh?.Resize(scale);
             //prefab.m_lodMesh.DebugDump();
             // LOD mesh 1
             //prefab.m_lodMeshCombined1.DebugDump();

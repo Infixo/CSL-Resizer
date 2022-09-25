@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResizerSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<DefaultProps>
+		<Prop>door marker</Prop> <!-- 3 props -->
+		<Prop>billboard</Prop> <!-- 140+ props => there are some that are standalone!-->
+		<Prop>wall</Prop> <!-- 30+ props-->
+		<Prop>logo</Prop> <!-- 60+ props-->
+		<Prop>roof</Prop> <!-- roofad, Rooftop access, Rooftop window, Slanted rooftop window, Roof Vegetation, Roof Walkway-->
+		<Prop>flood light</Prop> <!-- 25+ props-->
+		<Prop>ac box</Prop>,
+		<Prop>rotating ac</Prop>,
+		<Prop>light pole</Prop> <!-- 2 props-->
+		<Prop>solar panel</Prop> <!-- 5 props-->
+		<Prop>antenna</Prop> <!-- Microwave antenna, Wifi antenna-->
+		<Prop>neon</Prop> <!-- 8 props-->
+		<Prop>organic shop 3d sign</Prop> <!-- 4 props-->
+		<Prop>air source heat pump</Prop> <!-- 2 props-->
+		<Prop>ventilation pipe</Prop> <!-- 2 props-->
+		<Prop>invisible helipad marker</Prop> <!-- not sure?-->
+		<Prop>radio mast</Prop>
+	</DefaultProps>
+	<PrefabsToResize>
+		<Prefab name="University"           x="0.6" y="0.6" z="0.6"/>
+		<Prefab name="Police Headquarters"  x="0.5" y="0.5" z="0.5"/>
+		<Prefab name="Fire Station"         x="0.7" z="0.7"/>
+	</PrefabsToResize>
+</ResizerSettings>
