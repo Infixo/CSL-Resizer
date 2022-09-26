@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using ICities;
@@ -7,7 +6,7 @@ using CitiesHarmony.API;
 
 namespace Resizer
 {
-    public class ResizerMod : IUserMod, ILoadingExtension
+    public class ResizerMod : IUserMod
     {
         public string Name => "Resizer";
         public string Description => "Changes the size of building prefabs";
@@ -26,85 +25,12 @@ namespace Resizer
             if (HarmonyHelper.IsHarmonyInstalled) ResizerPatcher.UnpatchAll();
         }
 
-        // called when level loading begins
-        public void OnCreated(ILoading loading)
-        {
-            //throw new System.NotImplementedException();
-        }
-
-        // called when level is loaded
-        public void OnLevelLoaded(LoadMode mode)
-        {
-            /*
-            //Debug.Log("Resizer: OnLevelLoaded - called when level is loaded");
-            if (_resized)
-                Debug.Log("Resizer: building prefabs already resized");
-            else
-            {
-                Debug.Log("Resizer: resizing prefabs...");
-                //Resizer.ResizeBuildingPrefabs();
-                _resized = true;
-                Debug.Log("Resizer: resizing prefabs OK");
-            }
-            */
-       }
-        
-        // called when unloading begins
-        public void OnLevelUnloading()
-        {
-            //throw new System.NotImplementedException();
-        }
-
-        // called when unloading finished
-        public void OnReleased()
-        {
-            //throw new System.NotImplementedException();
-        }
-
     } // class ResizerMod
 
     public static class Resizer
     {
         private static readonly List<BuildingInfo> _resized = new List<BuildingInfo>();
-        /*
-        public static string[] prefabsToResize = new string[] { "University", "Police Headquarters", "Fire Station" };
-        public static Vector3 scaleValue = new Vector3(0.5f, 0.5f, 0.5f);
-        public static string[] propsToShift = new string[] {
-            "door marker", // 3 props
-            "billboard", // 140+ props => there are some that are standalone!
-            "wall", // 30+ props
-            "logo", // 60+ props
-            "roof", // roofad, Rooftop access, Rooftop window, Slanted rooftop window, Roof Vegetation, Roof Walkway
-            "flood light", // 25+ props
-            "ac box", "rotating ac",
-            "light pole", // 2 props
-            "solar panel", // 5 props
-            "antenna", // Microwave antenna, Wifi antenna
-            "neon", // 8 props
-            "organic shop 3d sign", // 4 props
-            "air source heat pump", // 2 props
-            "ventilation pipe", // 2 props
-            "invisible helipad marker", // not sure?
-            "radio mast"
-        };
-        */
-        /*
-        public static void ResizeBuildingPrefabs()
-        {
-            // total number of loaded building assets
-            int buildingPrefabCount = PrefabCollection<BuildingInfo>.LoadedCount();
-            Debug.Log($"Resizer: number of loaded building prefabs is {buildingPrefabCount}");
-            // iterate through the prefabs
-            for (uint i = 0; i < buildingPrefabCount; i++)
-            {
-                // get the building asset with the given index from the collection
-                BuildingInfo prefab = PrefabCollection<BuildingInfo>.GetLoaded(i);
-                //Debug.Log($"Resizer: prefab no {i} {prefab.name}");
-                if (prefabsToResize.Contains(prefab.name))
-                    prefab.ProcessBuildingPrefab(scaleValue);
-            }
-        }
-        */
+
         public static void DebugDump(this Mesh mesh)
         {
             if (mesh == null)
@@ -191,60 +117,24 @@ namespace Resizer
 
             // shift props
             //prefab.m_props[0].m_position
+            if (ResizerXml.Settings != null)
+                foreach (BuildingInfo.Prop prop in prefab.m_props)
+                    if ( (prop.m_prop      != null && ResizerXml.Settings.CheckPropName(prop.m_prop.name) ) ||
+                         (prop.m_finalProp != null && ResizerXml.Settings.CheckPropName(prop.m_finalProp.name) ) )
+                    {
+                        //Debug.Log($"Resizer: shifting prop {prop.m_prop?.name}");
+                        prop.m_position = Vector3.Scale(prop.m_position, scale);
+                    }
 
-            bool CheckPropName(string propName)
-            {
-                //foreach (string propPart in propsToShift)
-                //if (propName.Contains(propPart))
-                //return true;
-                //return false;
-                return ResizerXml.Settings != null && ResizerXml.Settings.CheckPropName(propName);
-            }
-
-            foreach (BuildingInfo.Prop prop in prefab.m_props)
-                if ( (prop.m_prop != null && CheckPropName(prop.m_prop.name)) || (prop.m_finalProp != null && CheckPropName(prop.m_finalProp.name)) )
-                {
-                    //Debug.Log($"Resizer: shifting prop {prop.m_prop?.name}");
-                    prop.m_position = Vector3.Scale(prop.m_position, scale);
-                }
-
-            // shift doors
+            // no need to shift doors - they are calculated later
             //prefab.m_enterDoors[0].m_position
             //prefab.m_exitDoors[0].m_position
-            /*
-            if (prefab.m_enterDoors != null)
-                foreach (BuildingInfo.Prop prop in prefab.m_enterDoors)
-                {
-                    //Debug.Log($"Resizer: shifting entry door {prop.m_prop?.name}");
-                    prop.m_position = Vector3.Scale(prop.m_position, scale);
-                }
-            if (prefab.m_exitDoors != null)
-                foreach (BuildingInfo.Prop prop in prefab.m_exitDoors)
-                {
-                    //Debug.Log($"Resizer: shifting exit doors {prop.m_prop?.name}");
-                    prop.m_position = Vector3.Scale(prop.m_position, scale);
-                }
-            */
 
             // update lod meshes
-            // LOD mesh
-            //Debug.Log($"Resizer: resizing lod meshes");
-            //prefab.m_lodMesh.DebugDump();
             prefab.m_lodMesh?.Resize(scale);
-            //prefab.m_lodMesh.DebugDump();
-            // LOD mesh 1
-            //prefab.m_lodMeshCombined1.DebugDump();
             prefab.m_lodMeshCombined1?.Resize(scale);
-            //prefab.m_lodMeshCombined1.DebugDump();
-            // LOD mesh 4
-            //prefab.m_lodMeshCombined4.DebugDump();
             prefab.m_lodMeshCombined4?.Resize(scale);
-            //prefab.m_lodMeshCombined4.DebugDump();
-            // LOD mesh 8
-            //prefab.m_lodMeshCombined8.DebugDump();
             prefab.m_lodMeshCombined8?.Resize(scale);
-            //prefab.m_lodMeshCombined8.DebugDump();
-
 
             // 4. Shift props and other added items (?) note that some props are placed on the ground
             //prefab.m_size

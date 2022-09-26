@@ -1,10 +1,4 @@
-﻿using System;
-//using System.Collections.Generic;
-//using System.Reflection;
-using UnityEngine;
-using ColossalFramework.Packaging;
-//using ColossalFramework.Math;
-//using ColossalFramework.Plugins;
+﻿using UnityEngine;
 using HarmonyLib;
 
 namespace Resizer
@@ -53,12 +47,6 @@ namespace Resizer
             //Debug.Log($"BuildingInfo_InitializePrefab_Postfix: prefab {__instance.name} mesh {__instance.m_mesh?.name} props {__instance.m_props?.Length}");
             __instance.ProcessBuildingPrefab();
         }
-
-        //[HarmonyPostfix, HarmonyPatch("InitializePrefabInstance")]
-        //public static void BuildingInfo_InitializePrefabInstance_Postfix(BuildingInfo __instance, PrefabInfo prefabInfo)
-        //{
-            //Debug.Log($"BuildingInfo_InitializePrefabInstance_Postfix: prefab {prefabInfo.name} ai {__instance.m_buildingAI?.name}");
-        //}
     }
 
 } // namespace

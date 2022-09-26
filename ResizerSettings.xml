@@ -18,10 +18,19 @@
 		<Prop>ventilation pipe</Prop> <!-- 2 props-->
 		<Prop>invisible helipad marker</Prop> <!-- not sure?-->
 		<Prop>radio mast</Prop>
+		<Prop>maru_light</Prop> <!-- Modern Japan prop -->
 	</DefaultProps>
 	<PrefabsToResize>
-		<Prefab name="University"           x="0.6" y="0.6" z="0.6"/>
-		<Prefab name="Police Headquarters"  x="0.5" y="0.5" z="0.5"/>
-		<Prefab name="Fire Station"         x="0.7" z="0.7"/>
+		<!-- Campus DLC -->
+		<Prefab name="University Dormitory 01"      x="0.90" y="0.85" z="0.90"/>
+		<Prefab name="University Laboratories 01"   x="0.90" y="0.85" z="0.90"/>
+		<Prefab name="University Library 01"        x="0.95" y="0.95" z="0.95"/>
+		<Prefab name="University Administration 01" x="0.90" y="0.85" z="0.90"/>
+		<Prefab name="University Study Hall 01"     x="0.90" y="0.90" z="0.90"/>
+		<!-- Modern Japan CCP -->
+		<Prefab name="PDX10_JA_BLDG"       x="0.90" y="0.90" z="0.90"/> <!--  46m,  ~8 floors -->
+		<Prefab name="PDX18_Shinjuku_bldg" x="0.90" y="0.80" z="0.95"/> <!-- 126m, ~30 floors -->
+		<Prefab name="PDX19_Yokohama-bldg" x="0.90" y="0.80" z="0.90"/> <!-- 171m, ~40 floors -->
+		<Prefab name="PDX20_Shin-maru"     x="0.90" y="0.75" z="0.90"/> <!-- 201m, ~45 floors -->
 	</PrefabsToResize>
 </ResizerSettings>
