@@ -22,11 +22,19 @@
 	</DefaultProps>
 	<PrefabsToResize>
 		<!-- Campus DLC -->
-		<Prefab name="University Dormitory 01"      x="0.90" y="0.85" z="0.90"/>
-		<Prefab name="University Laboratories 01"   x="0.90" y="0.85" z="0.90"/>
-		<Prefab name="University Library 01"        x="0.95" y="0.95" z="0.95"/>
-		<Prefab name="University Administration 01" x="0.90" y="0.85" z="0.90"/>
-		<Prefab name="University Study Hall 01"     x="0.90" y="0.90" z="0.90"/>
+		<Prefab name="Liberal Arts Dormitory 01"      x="0.95" y="0.85" z="1.00" props="all" />
+		<Prefab name="Liberal Arts Laboratories 01"   x="0.95" y="0.90" z="0.95" props="all" />
+		<Prefab name="Liberal Arts Library 01"        x="1.00" y="0.95" z="1.00" props="all" />
+		<Prefab name="Liberal Arts Administration 01" x="0.95" y="0.90" z="0.95" props="all" />
+		<Prefab name="University Dormitory 01"      x="0.90" y="0.85" z="0.90" props="all" />
+		<Prefab name="University Laboratories 01"   x="0.90" y="0.85" z="0.90" props="all" />
+		<Prefab name="University Library 01"        x="0.95" y="0.95" z="0.95" props="all" />
+		<Prefab name="University Administration 01" x="0.90" y="0.85" z="0.90" props="all" />
+		<Prefab name="University Study Hall 01"     x="0.90" y="0.90" z="0.90" props="all" />
+		<Prefab name="Trade School Dormitory 01"      x="0.95" y="0.85" z="0.95" props="all" />
+		<Prefab name="Trade School Laboratories 01"   x="0.95" y="0.90" z="0.95" props="all" />
+		<Prefab name="Trade School Administration 01" x="0.95" y="0.95" z="0.95" props="all" />
+		<Prefab name="Trade School Study Hall 01"     x="0.95" y="0.90" z="0.95" props="all" />
 		<!-- Modern Japan CCP -->
 		<Prefab name="PDX10_JA_BLDG"       x="0.90" y="0.90" z="0.90"/> <!--  46m,  ~8 floors -->
 		<Prefab name="PDX18_Shinjuku_bldg" x="0.90" y="0.80" z="0.95"/> <!-- 126m, ~30 floors -->

@@ -59,6 +59,11 @@ namespace Resizer
             return false;
         }
 
+        public PrefabToResize FindPrefab(string name)
+        {
+            return PrefabsToResize.FirstOrDefault(prefab => name.ToLower() == prefab.Name.ToLower());
+        }
+
         public bool CheckPrefabName(string name)
         {
             //return PrefabsToResize.FirstOrDefault( prefab => name.ToLower().Contains(prefab.Name.ToLower()) ) != null;
@@ -69,6 +74,11 @@ namespace Resizer
         {
             //return PrefabsToResize.First( prefab => name.ToLower().Contains(prefab.Name.ToLower()) ).Scale;
             return PrefabsToResize.First( prefab => name.ToLower() == prefab.Name.ToLower() ).Scale;
+        }
+        public bool CheckIfAllProps(string name)
+        {
+            //return PrefabsToResize.First( prefab => name.ToLower().Contains(prefab.Name.ToLower()) ).Scale;
+            return PrefabsToResize.First(prefab => name.ToLower() == prefab.Name.ToLower()).ResizeAllProps;
         }
     }
 
@@ -82,10 +92,13 @@ namespace Resizer
         public float Y = 1f;
         [XmlAttribute(AttributeName = "z", DataType = "float")]
         public float Z = 1f;
+        [XmlAttribute(AttributeName = "props", DataType = "string")]
+        public string Props = "default"; // only "all" matters
         public Vector3 Scale { get { return new Vector3(X, Y, Z); } }
+        public bool ResizeAllProps { get { return Props == "all"; } }
         public override string ToString()
         {
-            return $"Prefab: {Name} Scale: {Scale}";
+            return $"Prefab: {Name} Scale: {Scale.ToString("F2")} Props: {Props}";
         }
     }
 

@@ -107,7 +107,7 @@ namespace Resizer
 
         public static void ProcessBuildingPrefab(this BuildingInfo prefab, Vector3 scale)
         {
-            Debug.Log($"Resizer: resizing prefab {prefab.name} by {scale}");
+            Debug.Log($"Resizer: resizing prefab {prefab.name} by {scale.ToString("F2")}");
 
             // main mash and generated mesh only if not null
             //prefab.m_mesh.DebugDump();
@@ -118,13 +118,17 @@ namespace Resizer
             // shift props
             //prefab.m_props[0].m_position
             if (ResizerXml.Settings != null)
+            {
+                bool resizeAllProps = ResizerXml.Settings.CheckIfAllProps(prefab.name);
                 foreach (BuildingInfo.Prop prop in prefab.m_props)
-                    if ( (prop.m_prop      != null && ResizerXml.Settings.CheckPropName(prop.m_prop.name) ) ||
-                         (prop.m_finalProp != null && ResizerXml.Settings.CheckPropName(prop.m_finalProp.name) ) )
+                    if (resizeAllProps ||
+                        (prop.m_prop != null && ResizerXml.Settings.CheckPropName(prop.m_prop.name)) ||
+                        (prop.m_finalProp != null && ResizerXml.Settings.CheckPropName(prop.m_finalProp.name)))
                     {
                         //Debug.Log($"Resizer: shifting prop {prop.m_prop?.name}");
                         prop.m_position = Vector3.Scale(prop.m_position, scale);
                     }
+            }
 
             // no need to shift doors - they are calculated later
             //prefab.m_enterDoors[0].m_position
@@ -137,10 +141,10 @@ namespace Resizer
             prefab.m_lodMeshCombined8?.Resize(scale);
 
             // 4. Shift props and other added items (?) note that some props are placed on the ground
-            //prefab.m_size
-            //prefab.m_renderSize;
-            //prefab.m_collisionHeight
-            //prefab.m_generatedInfo.m_baseArea;
+            //prefab.m_size - calculated
+            //prefab.m_renderSize - calculated
+            //prefab.m_collisionHeight - calculated
+            //prefab.m_generatedInfo.m_baseArea; - all calculated
             //prefab.m_generatedInfo.m_baseNormals;
             //prefab.m_generatedInfo.m_heights;
 
